@@ -1,0 +1,41 @@
+{
+  "name": "redis.jsx",
+  "version": "0.1.0",
+  "description": "JSX wrapper for Redis node.js driver",
+  "scripts": {
+    "build": "grunt build",
+    "test": "grunt test",
+    "doc": "grunt doc"
+  },
+  "engines": {
+    "node": ">=0.8.0"
+  },
+  "keywords": [
+    "jsx",
+    "lib"
+  ],
+  "main": "./lib/redis.jsx",
+  "homepage": "https://github.com/shibukawa/redis.jsx.git",
+  "bugs": {
+    "url": "https://github.com/shibukawa/redis.jsx.git/issues"
+  },
+  "directories": {
+    "doc": "./doc",
+    "lib": "./lib",
+    "test": "./test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/shibukawa/redis.jsx.git"
+  },
+  "devDependencies": {
+    "grunt-contrib-watch": "~0.5.3",
+    "grunt": "~0.4.1",
+    "grunt-jsx": "~0.0.4"
+  },
+  "author": "shibukawa",
+  "license": "MIT",
+  "dependencies": {
+    "redis": "~0.8.5"
+  }
+}
