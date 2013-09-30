@@ -96,10 +96,18 @@ native __fake__ class RedisClient extends EventEmitter
     function DEBUG object() : void;
     function debug segfault() : void;
     function DEBUG segfault() : void;*/
-    function decr() : void;
-    function DECR() : void;
-    function decrby() : void;
-    function DECRBY() : void;
+    function decr(key : string) : void;
+    function decr(key : string, callback : (Error) -> void) : void;
+    function decr(key : string, callback : (Error, int) -> void) : void;
+    function DECR(key : string) : void;
+    function DECR(key : string, callback : (Error) -> void) : void;
+    function DECR(key : string, callback : (Error, int) -> void) : void;
+    function decrby(key : string, decrement : int) : void;
+    function decrby(key : string, decrement : int, callback : (Error) -> void) : void;
+    function decrby(key : string, decrement : int, callback : (Error, int) -> void) : void;
+    function DECRBY(key : string, decrement : int) : void;
+    function DECRBY(key : string, decrement : int, callback : (Error) -> void) : void;
+    function DECRBY(key : string, decrement : int, callback : (Error, int) -> void) : void;
     function del(key : string) : void;
     function del(key : string, callback : (Error) -> void) : void;
     function del(key : string, callback : (Error, int) -> void) : void;
@@ -172,12 +180,28 @@ native __fake__ class RedisClient extends EventEmitter
     function HSETNX() : void;
     function hvals() : void;
     function HVALS() : void;
-    function incr() : void;
-    function INCR() : void;
-    function incrby() : void;
-    function INCRBY() : void;
-    function incrbyfloat() : void;
-    function INCRBYFLOAT() : void;
+
+    function incr(key : string) : void;
+    function incr(key : string, callback : (Error) -> void) : void;
+    function incr(key : string, callback : (Error, int) -> void) : void;
+    function INCR(key : string) : void;
+    function INCR(key : string, callback : (Error) -> void) : void;
+    function INCR(key : string, callback : (Error, int) -> void) : void;
+
+    function incrby(key : string, increment : int) : void;
+    function incrby(key : string, increment : int, callback : (Error) -> void) : void;
+    function incrby(key : string, increment : int, callback : (Error, string) -> void) : void;
+    function INCRBY(key : string, increment : int) : void;
+    function INCRBY(key : string, increment : int, callback : (Error) -> void) : void;
+    function INCRBY(key : string, increment : int, callback : (Error, string) -> void) : void;
+
+    function incrbyfloat(key : string, increment : number) : void;
+    function incrbyfloat(key : string, increment : number, callback : (Error) -> void) : void;
+    function incrbyfloat(key : string, increment : number, callback : (Error, variant) -> void) : void;
+    function INCRBYFLOAT(key : string, increment : number) : void;
+    function INCRBYFLOAT(key : string, increment : number, callback : (Error) -> void) : void;
+    function INCRBYFLOAT(key : string, increment : number, callback : (Error, int) -> void) : void;
+
     function info() : void;
     function INFO() : void;
     function keys() : void;
@@ -280,18 +304,31 @@ native __fake__ class RedisClient extends EventEmitter
     function SDIFFSTORE() : void;
     function select() : void;
     function SELECT() : void;
+
     function set(key : string, value : string) : void;
     function set(key : string, value : string, callback : (Error) -> void) : void;
     function set(key : string, value : string, callback : (Error, string) -> void) : void;
     function SET(key : string, value : string) : void;
     function SET(key : string, value : string, callback : (Error) -> void) : void;
     function SET(key : string, value : string, callback : (Error, string) -> void) : void;
+
     function setbit() : void;
     function SETBIT() : void;
-    function setex() : void;
-    function SETEX() : void;
-    function setnx() : void;
-    function SETNX() : void;
+
+    function setex(key : string, seconds : int, value : string) : void;
+    function setex(key : string, seconds : int, value : string, callback : (Error) -> void) : void;
+    function setex(key : string, seconds : int, value : string, callback : (Error, string) -> void) : void;
+    function SETEX(key : string, seconds : int, value : string) : void;
+    function SETEX(key : string, seconds : int, value : string, callback : (Error) -> void) : void;
+    function SETEX(key : string, seconds : int, value : string, callback : (Error, string) -> void) : void;
+
+    function setnx(key : string, value : string) : void;
+    function setnx(key : string, value : string, callback : (Error) -> void) : void;
+    function setnx(key : string, value : string, callback : (Error, int) -> void) : void;
+    function SETNX(key : string, value : string) : void;
+    function SETNX(key : string, value : string, callback : (Error) -> void) : void;
+    function SETEX(key : string, value : string, callback : (Error, int) -> void) : void;
+
     function setrange() : void;
     function SETRANGE() : void;
     function shutdown() : void;
