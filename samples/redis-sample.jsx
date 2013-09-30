@@ -19,8 +19,8 @@ class _Main {
             }
         });*/
         client.set("testvalue", "10");
-        client.incrbyfloat("testvalue", 10.5, function (err : Error, ret : variant) : void {
-            console.log(typeof ret, ret);
+        client.incrbyfloat("testvalue", 10.5, function (err : Error, ret : string) : void {
+            console.log(ret);
             client.end();
         });
     }

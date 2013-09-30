@@ -96,18 +96,21 @@ native __fake__ class RedisClient extends EventEmitter
     function DEBUG object() : void;
     function debug segfault() : void;
     function DEBUG segfault() : void;*/
+
     function decr(key : string) : void;
     function decr(key : string, callback : (Error) -> void) : void;
     function decr(key : string, callback : (Error, int) -> void) : void;
     function DECR(key : string) : void;
     function DECR(key : string, callback : (Error) -> void) : void;
     function DECR(key : string, callback : (Error, int) -> void) : void;
+
     function decrby(key : string, decrement : int) : void;
     function decrby(key : string, decrement : int, callback : (Error) -> void) : void;
     function decrby(key : string, decrement : int, callback : (Error, int) -> void) : void;
     function DECRBY(key : string, decrement : int) : void;
     function DECRBY(key : string, decrement : int, callback : (Error) -> void) : void;
     function DECRBY(key : string, decrement : int, callback : (Error, int) -> void) : void;
+
     function del(key : string) : void;
     function del(key : string, callback : (Error) -> void) : void;
     function del(key : string, callback : (Error, int) -> void) : void;
@@ -120,10 +123,13 @@ native __fake__ class RedisClient extends EventEmitter
     function DEL(keys : string[]) : void;
     function DEL(keys : string[], callback : (Error) -> void) : void;
     function DEL(keys : string[], callback : (Error, int) -> void) : void;
+
     function discard() : void;
     function DISCARD() : void;
-    function dump() : void;
-    function DUMP() : void;
+
+    function dump(key : string, callback : (Error, string) -> void) : void;
+    function DUMP(key : string, callback : (Error, string) -> void) : void;
+
     function echo() : void;
     function ECHO() : void;
     function eval() : void;
@@ -132,18 +138,36 @@ native __fake__ class RedisClient extends EventEmitter
     function EVALSHA() : void;
     function exec() : void;
     function EXEC() : void;
-    function exists() : void;
-    function EXISTS() : void;
-    function expire() : void;
-    function EXPIRE() : void;
-    function expireat() : void;
-    function EXPIREAT() : void;
+
+    function exists(key : string) : void;
+    function exists(key : string, callback : (Error) -> void) : void;
+    function exists(key : string, callback : (Error, int) -> void) : void;
+    function EXISTS(key : string) : void;
+    function EXISTS(key : string, callback : (Error) -> void) : void;
+    function EXISTS(key : string, callback : (Error, int) -> void) : void;
+
+    function expire(key : string, seconds : int, value : string) : void;
+    function expire(key : string, seconds : int, value : string, callback : (Error) -> void) : void;
+    function expire(key : string, seconds : int, value : string, callback : (Error, int) -> void) : void;
+    function EXPIRE(key : string, seconds : int, value : string) : void;
+    function EXPIRE(key : string, seconds : int, value : string, callback : (Error) -> void) : void;
+    function EXPIRE(key : string, seconds : int, value : string, callback : (Error, int) -> void) : void;
+
+    function expireat(key : string, timestamp : int, value : string) : void;
+    function expireat(key : string, timestamp : int, value : string, callback : (Error) -> void) : void;
+    function expireat(key : string, timestamp : int, value : string, callback : (Error, int) -> void) : void;
+    function EXPIREAT(key : string, timestamp : int, value : string) : void;
+    function EXPIREAT(key : string, timestamp : int, value : string, callback : (Error) -> void) : void;
+    function EXPIREAT(key : string, timestamp : int, value : string, callback : (Error, int) -> void) : void;
+
     function flushall() : void;
     function FLUSHALL() : void;
     function flushdb() : void;
     function FLUSHDB() : void;
+
     function get(key : string, callback : (Error, string) -> void) : void;
     function GET(key : string, callback : (Error, string) -> void) : void;
+
     function getbit() : void;
     function GETBIT() : void;
     function getrange() : void;
@@ -197,15 +221,17 @@ native __fake__ class RedisClient extends EventEmitter
 
     function incrbyfloat(key : string, increment : number) : void;
     function incrbyfloat(key : string, increment : number, callback : (Error) -> void) : void;
-    function incrbyfloat(key : string, increment : number, callback : (Error, variant) -> void) : void;
+    function incrbyfloat(key : string, increment : number, callback : (Error, string) -> void) : void;
     function INCRBYFLOAT(key : string, increment : number) : void;
     function INCRBYFLOAT(key : string, increment : number, callback : (Error) -> void) : void;
-    function INCRBYFLOAT(key : string, increment : number, callback : (Error, int) -> void) : void;
+    function INCRBYFLOAT(key : string, increment : number, callback : (Error, string) -> void) : void;
 
     function info() : void;
     function INFO() : void;
-    function keys() : void;
-    function KEYS() : void;
+
+    function keys(pattern : string, callback : (Error, string[]) -> void) : void;
+    function KEYS(pattern : string, callback : (Error, string[]) -> void) : void;
+
     function lastsave() : void;
     function LASTSAVE() : void;
     function lindex() : void;
@@ -228,54 +254,103 @@ native __fake__ class RedisClient extends EventEmitter
     function LSET() : void;
     function ltrim() : void;
     function LTRIM() : void;
+
     function mget(keys : string[], callback : (Error, string[]) -> void) : void;
     function MGET(keys : string[], callback : (Error, string[]) -> void) : void;
-    function migrate() : void;
-    function MIGRATE() : void;
+
+    function migrate(host : string, port : int, destinationdb : string, timeout : int, command : string) : void;
+    function migrate(host : string, port : int, destinationdb : string, timeout : int, command : string, callback : (Error) -> void) : void;
+    function migrate(host : string, port : int, destinationdb : string, timeout : int, command : string, callback : (Error, string) -> void) : void;
+    function MIGRATE(host : string, port : int, destinationdb : string, timeout : int, command : string) : void;
+    function MIGRATE(host : string, port : int, destinationdb : string, timeout : int, command : string, callback : (Error) -> void) : void;
+    function MIGRATE(host : string, port : int, destinationdb : string, timeout : int, command : string, callback : (Error, string) -> void) : void;
+
     function monitor() : void;
     function MONITOR() : void;
-    function move() : void;
-    function MOVE() : void;
+
+    function move(key : string, db : string) : void;
+    function move(key : string, db : string, callback : (Error) -> void) : void;
+    function move(key : string, db : string, callback : (Error, int) -> void) : void;
+    function MOVE(key : string, db : string) : void;
+    function MOVE(key : string, db : string, callback : (Error) -> void) : void;
+    function MOVE(key : string, db : string, callback : (Error, int) -> void) : void;
+
     function mset(items : string[]) : void;
     function mset(items : string[], callback : (Error) -> void) : void;
     function mset(items : string[], value : string, callback : (Error, string) -> void) : void;
     function MSET(items : string[], value : string) : void;
     function MSET(items : string[], value : string, callback : (Error) -> void) : void;
     function MSET(items : string[], value : string, callback : (Error, string) -> void) : void;
+
     function msetnx() : void;
     function MSETNX() : void;
     function multi() : void;
     function MULTI() : void;
     function object() : void;
     function OBJECT() : void;
-    function persist() : void;
-    function PERSIST() : void;
-    function pexpire() : void;
-    function PEXPIRE() : void;
-    function pexpireat() : void;
-    function PEXPIREAT() : void;
+
+    function persist(key : string) : void;
+    function persist(key : string, callback : (Error) -> void) : void;
+    function persist(key : string, callback : (Error, int) -> void) : void;
+    function PERSIST(key : string) : void;
+    function PERSIST(key : string, callback : (Error) -> void) : void;
+    function PERSIST(key : string, callback : (Error, int) -> void) : void;
+
+    function pexpire(key : string, milliseconds : int, value : string) : void;
+    function pexpire(key : string, milliseconds : int, value : string, callback : (Error) -> void) : void;
+    function pexpire(key : string, milliseconds : int, value : string, callback : (Error, int) -> void) : void;
+    function PEXPIRE(key : string, milliseconds : int, value : string) : void;
+    function PEXPIRE(key : string, milliseconds : int, value : string, callback : (Error) -> void) : void;
+    function PEXPIRE(key : string, milliseconds : int, value : string, callback : (Error, int) -> void) : void;
+
+    function pexpireat(key : string, millisecondsTimestamp : int, value : string) : void;
+    function pexpireat(key : string, millisecondsTimestamp : int, value : string, callback : (Error) -> void) : void;
+    function pexpireat(key : string, millisecondsTimestamp : int, value : string, callback : (Error, int) -> void) : void;
+    function PEXPIREAT(key : string, millisecondsTimestamp : int, value : string) : void;
+    function PEXPIREAT(key : string, millisecondsTimestamp : int, value : string, callback : (Error) -> void) : void;
+    function PEXPIREAT(key : string, millisecondsTimestamp : int, value : string, callback : (Error, int) -> void) : void;
+
     function ping() : void;
     function PING() : void;
     function psetex() : void;
     function PSETEX() : void;
     function psubscribe() : void;
     function PSUBSCRIBE() : void;
-    function pttl() : void;
-    function PTTL() : void;
+
+    function pttl(key : string, callback : (Error, int) -> void) : void;
+    function PTTL(key : string, callback : (Error, int) -> void) : void;
+
     function publish() : void;
     function PUBLISH() : void;
     function punsubscribe() : void;
     function PUNSUBSCRIBE() : void;
     function quit() : void;
     function QUIT() : void;
-    function randomkey() : void;
-    function RANDOMKEY() : void;
-    function rename() : void;
-    function RENAME() : void;
-    function renamenx() : void;
-    function RENAMENX() : void;
-    function restore() : void;
-    function RESTORE() : void;
+
+    function randomkey(callback : (Error, Nullable.<string>) -> void) : void;
+    function RANDOMKEY(callback : (Error, Nullable.<string>) -> void) : void;
+
+    function rename(key : string, newkey : string) : void;
+    function rename(key : string, newkey : string, callback : (Error) -> void) : void;
+    function rename(key : string, newkey : string, callback : (Error, string) -> void) : void;
+    function RENAME(key : string, newkey : string) : void;
+    function RENAME(key : string, newkey : string, callback : (Error) -> void) : void;
+    function RENAME(key : string, newkey : string, callback : (Error, string) -> void) : void;
+
+    function renamenx(key : string, newkey : string) : void;
+    function renamenx(key : string, newkey : string, callback : (Error) -> void) : void;
+    function renamenx(key : string, newkey : string, callback : (Error, int) -> void) : void;
+    function RENAMENX(key : string, newkey : string) : void;
+    function RENAMENX(key : string, newkey : string, callback : (Error) -> void) : void;
+    function RENAMENX(key : string, newkey : string, callback : (Error, int) -> void) : void;
+
+    function restore(key : string, ttl : int, serializedValue : string) : void;
+    function restore(key : string, ttl : int, serializedValue : string, callback : (Error) -> void) : void;
+    function restore(key : string, ttl : int, serializedValue : string, callback : (Error, string) -> void) : void;
+    function RESTORE(key : string, ttl : int, serializedValue : string) : void;
+    function RESTORE(key : string, ttl : int, serializedValue : string, callback : (Error) -> void) : void;
+    function RESTORE(key : string, ttl : int, serializedValue : string, callback : (Error, string) -> void) : void;
+
     function rpop() : void;
     function RPOP() : void;
     function rpoplpush() : void;
@@ -355,8 +430,10 @@ native __fake__ class RedisClient extends EventEmitter
     function SRANDMEMBER() : void;
     function srem() : void;
     function SREM() : void;
-    function strlen() : void;
-    function STRLEN() : void;
+
+    function strlen(key : string, callback : (Error, int) -> void) : void;
+    function STRLEN(key : string, callback : (Error, int) -> void) : void;
+
     function subscribe() : void;
     function SUBSCRIBE() : void;
     function sunion() : void;
@@ -367,15 +444,12 @@ native __fake__ class RedisClient extends EventEmitter
     function SYNC() : void;
     function time() : void;
     function TIME() : void;
-    function ttl() : void;
-    function TTL() : void;
 
-    function type(key : string) : void;
-    function type(key : string, callback : (Error) -> void) : void;
+    function ttl(key : string, callback : (Error, int) -> void) : void;
+    function TTL(key : string, callback : (Error, int) -> void) : void;
+
     function type(key : string, callback : (Error, string) -> void) : void;
-    function TYPE(key : string) : void;
-    function TYPE(key : string, callback : (Error) -> void) : void;
-    function TYPE(callback : (Error, string) -> void) : void;
+    function TYPE(key : string, callback : (Error, string) -> void) : void;
 
     function unsubscribe() : void;
     function UNSUBSCRIBE() : void;
