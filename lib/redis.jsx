@@ -268,8 +268,8 @@ abstract native __fake__ class RedisClient extends EventEmitter // implements Re
     function hlen(key : string, callback : (Error, int) -> void) : void;
     function HLEN(key : string, callback : (Error, int) -> void) : void;
 
-    function hmget(keys : string, field : string[], callback : (Error, Map.<string>) -> void) : void;
-    function HMGET(keys : string, field : string[], callback : (Error, Map.<string>) -> void) : void;
+    function hmget(keys : string, field : string[], callback : (Error, string[]) -> void) : void;
+    function HMGET(keys : string, field : string[], callback : (Error, string[]) -> void) : void;
 
     function hmset(hash : string, obj : string[]) : void;
     function hmset(hash : string, obj : string[], callback : (Error) -> void) : void;
@@ -530,10 +530,25 @@ abstract native __fake__ class RedisClient extends EventEmitter // implements Re
     function RPUSHX(key : string, value : string, callback : (Error) -> void) : void;
     function RPUSHX(key : string, value : string, callback : (Error, int) -> void) : void;
 
-    function sadd() : void;
-    function SADD() : void;
+    function sadd(key : string, member : string) : void;
+    function sadd(key : string, member : string, callback : (Error) -> void) : void;
+    function sadd(key : string, member : string, callback : (Error, int) -> void) : void;
+    function sadd(key : string, members : string[]) : void;
+    function sadd(key : string, members : string[], callback : (Error) -> void) : void;
+    function sadd(key : string, members : string[], callback : (Error, int) -> void) : void;
+    function SADD(key : string, member : string) : void;
+    function SADD(key : string, member : string, callback : (Error) -> void) : void;
+    function SADD(key : string, member : string, callback : (Error, int) -> void) : void;
+    function SADD(key : string, members : string[]) : void;
+    function SADD(key : string, members : string[], callback : (Error) -> void) : void;
+    function SADD(key : string, members : string[], callback : (Error, int) -> void) : void;
+
     function save() : void;
     function SAVE() : void;
+
+    function scard(key : string, callback : (Error, int) -> void) : void;
+    function SCARD(key : string, callback : (Error, int) -> void) : void;
+
     function scard() : void;
     function SCARD() : void;
     function scriptexists() : void;
@@ -544,10 +559,25 @@ abstract native __fake__ class RedisClient extends EventEmitter // implements Re
     function SCRIPTKILL() : void;
     function scriptload() : void;
     function SCRIPTLOAD() : void;
-    function sdiff() : void;
-    function SDIFF() : void;
-    function sdiffstore() : void;
-    function SDIFFSTORE() : void;
+
+    function sdiff(key : string, set : string, callback : (Error, string[]) -> void) : void;
+    function sdiff(key : string, sets : string[], callback : (Error, string[]) -> void) : void;
+    function SDIFF(key : string, set : string, callback : (Error, string[]) -> void) : void;
+    function SDIFF(key : string, sets : string[], callback : (Error, string[]) -> void) : void;
+
+    function sdiffstore(destination : string, key : string, set : string) : void;
+    function sdiffstore(destination : string, key : string, set : string, callback : (Error) -> void) : void;
+    function sdiffstore(destination : string, key : string, set : string, callback : (Error, int) -> void) : void;
+    function sdiffstore(destination : string, key : string, sets : string[]) : void;
+    function sdiffstore(destination : string, key : string, sets : string[], callback : (Error) -> void) : void;
+    function sdiffstore(destination : string, key : string, sets : string[], callback : (Error, int) -> void) : void;
+    function SDIFFSTORE(destination : string, key : string, set : string) : void;
+    function SDIFFSTORE(destination : string, key : string, set : string, callback : (Error) -> void) : void;
+    function SDIFFSTORE(destination : string, key : string, set : string, callback : (Error, int) -> void) : void;
+    function SDIFFSTORE(destination : string, key : string, sets : string[]) : void;
+    function SDIFFSTORE(destination : string, key : string, sets : string[], callback : (Error) -> void) : void;
+    function SDIFFSTORE(destination : string, key : string, sets : string[], callback : (Error, int) -> void) : void;
+
     function select() : void;
     function SELECT() : void;
 
@@ -588,20 +618,42 @@ abstract native __fake__ class RedisClient extends EventEmitter // implements Re
 
     function shutdown() : void;
     function SHUTDOWN() : void;
-    function sinter() : void;
-    function SINTER() : void;
-    function sinterstore() : void;
-    function SINTERSTORE() : void;
-    function sismember() : void;
-    function SISMEMBER() : void;
+
+    function sinter(key : string, set : string, callback : (Error, string[]) -> void) : void;
+    function sinter(key : string, sets : string[], callback : (Error, string[]) -> void) : void;
+    function SINTER(key : string, set : string, callback : (Error, string[]) -> void) : void;
+    function SINTER(key : string, sets : string[], callback : (Error, string[]) -> void) : void;
+
+    function sintertore(destination : string, key : string, set : string) : void;
+    function sinterstore(destination : string, key : string, set : string, callback : (Error) -> void) : void;
+    function sinterstore(destination : string, key : string, set : string, callback : (Error, int) -> void) : void;
+    function sinterstore(destination : string, key : string, sets : string[]) : void;
+    function sinterstore(destination : string, key : string, sets : string[], callback : (Error) -> void) : void;
+    function sinterstore(destination : string, key : string, sets : string[], callback : (Error, int) -> void) : void;
+    function SINTERTORE(destination : string, key : string, set : string) : void;
+    function SINTERSTORE(destination : string, key : string, set : string, callback : (Error) -> void) : void;
+    function SINTERSTORE(destination : string, key : string, set : string, callback : (Error, int) -> void) : void;
+    function SINTERSTORE(destination : string, key : string, sets : string[]) : void;
+    function SINTERSTORE(destination : string, key : string, sets : string[], callback : (Error) -> void) : void;
+    function SINTERSTORE(destination : string, key : string, sets : string[], callback : (Error, int) -> void) : void;
+
+    function sismember(key : string, member : string, callback : (Error, int) -> void) : void;
+    function SISMEMBER(key : string, member : string, callback : (Error, int) -> void) : void;
+
     function slaveof() : void;
     function SLAVEOF() : void;
     function slowlog() : void;
     function SLOWLOG() : void;
-    function smembers() : void;
-    function SMEMBERS() : void;
-    function smove() : void;
-    function SMOVE() : void;
+
+    function smembers(key : string, callback : (Error, string[]) -> void) : void;
+    function SMEMBERS(key : string, callback : (Error, string[]) -> void) : void;
+
+    function smove(destination : string, key : string, member : string) : void;
+    function smove(destination : string, key : string, member : string, callback : (Error) -> void) : void;
+    function smove(destination : string, key : string, member : string, callback : (Error, int) -> void) : void;
+    function SMOVE(destination : string, key : string, member : string) : void;
+    function SMOVE(destination : string, key : string, member : string, callback : (Error) -> void) : void;
+    function SMOVE(destination : string, key : string, member : string, callback : (Error, int) -> void) : void;
 
     function sort(key : string) : void;
     function sort(key : string, callback : (Error) -> void) : void;
@@ -616,22 +668,52 @@ abstract native __fake__ class RedisClient extends EventEmitter // implements Re
     function SORT(key : string, params : string[], callback : (Error) -> void) : void;
     function SORT(key : string, params : string[], callback : (Error, string[]) -> void) : void;
 
-    function spop() : void;
-    function SPOP() : void;
-    function srandmember() : void;
-    function SRANDMEMBER() : void;
-    function srem() : void;
-    function SREM() : void;
+    function spop(key : string, callback : (Error, string) -> void) : void;
+    function SPOP(key : string, callback : (Error, string) -> void) : void;
+
+    function srandmember(key : string, callback : (Error, string) -> void) : void;
+    function srandmember(key : string, count : int, callback : (Error, string[]) -> void) : void;
+    function SRANDMEMBER(key : string, callback : (Error, string) -> void) : void;
+    function SRANDMEMBER(key : string, count : int, callback : (Error, string[]) -> void) : void;
+
+    function srem(key : string, member : string) : void;
+    function srem(key : string, member : string, callback : (Error) -> void) : void;
+    function srem(key : string, member : string, callback : (Error, int) -> void) : void;
+    function srem(key : string, members : string[]) : void;
+    function srem(key : string, members : string[], callback : (Error) -> void) : void;
+    function srem(key : string, members : string[], callback : (Error, int) -> void) : void;
+    function SREM(key : string, member : string) : void;
+    function SREM(key : string, member : string, callback : (Error) -> void) : void;
+    function SREM(key : string, member : string, callback : (Error, int) -> void) : void;
+    function SREM(key : string, members : string[]) : void;
+    function SREM(key : string, members : string[], callback : (Error) -> void) : void;
+    function SREM(key : string, members : string[], callback : (Error, int) -> void) : void;
 
     function strlen(key : string, callback : (Error, int) -> void) : void;
     function STRLEN(key : string, callback : (Error, int) -> void) : void;
 
     function subscribe() : void;
     function SUBSCRIBE() : void;
-    function sunion() : void;
-    function SUNION() : void;
-    function sunionstore() : void;
-    function SUNIONSTORE() : void;
+
+
+    function sunion(key : string, set : string, callback : (Error, string[]) -> void) : void;
+    function sunion(key : string, sets : string[], callback : (Error, string[]) -> void) : void;
+    function SUNION(key : string, set : string, callback : (Error, string[]) -> void) : void;
+    function SUNION(key : string, sets : string[], callback : (Error, string[]) -> void) : void;
+
+    function sunionstore(destination : string, key : string, set : string) : void;
+    function sunionstore(destination : string, key : string, set : string, callback : (Error) -> void) : void;
+    function sunionstore(destination : string, key : string, set : string, callback : (Error, int) -> void) : void;
+    function sunionstore(destination : string, key : string, sets : string[]) : void;
+    function sunionstore(destination : string, key : string, sets : string[], callback : (Error) -> void) : void;
+    function sunionstore(destination : string, key : string, sets : string[], callback : (Error, int) -> void) : void;
+    function SUNIONSTORE(destination : string, key : string, set : string) : void;
+    function SUNIONSTORE(destination : string, key : string, set : string, callback : (Error) -> void) : void;
+    function SUNIONSTORE(destination : string, key : string, set : string, callback : (Error, int) -> void) : void;
+    function SUNIONSTORE(destination : string, key : string, sets : string[]) : void;
+    function SUNIONSTORE(destination : string, key : string, sets : string[], callback : (Error) -> void) : void;
+    function SUNIONSTORE(destination : string, key : string, sets : string[], callback : (Error, int) -> void) : void;
+
     function sync() : void;
     function SYNC() : void;
     function time() : void;
@@ -649,14 +731,33 @@ abstract native __fake__ class RedisClient extends EventEmitter // implements Re
     function UNWATCH() : void;
     function watch() : void;
     function WATCH() : void;
-    function zadd() : void;
-    function ZADD() : void;
-    function zcard() : void;
-    function ZCARD() : void;
-    function zcount() : void;
-    function ZCOUNT() : void;
-    function zincrby() : void;
-    function ZINCRBY() : void;
+
+    function zadd(key : string, score : int, member : string) : void;
+    function zadd(key : string, score : int, member : string, callback : (Error) -> void) : void;
+    function zadd(key : string, score : int, member : string, callback : (Error, int) -> void) : void;
+    function zadd(key : string, members : variant[]) : void;
+    function zadd(key : string, members : variant[], callback : (Error) -> void) : void;
+    function zadd(key : string, members : variant[], callback : (Error, int) -> void) : void;
+    function ZADD(key : string, score : int, member : string) : void;
+    function ZADD(key : string, score : int, member : string, callback : (Error) -> void) : void;
+    function ZADD(key : string, score : int, member : string, callback : (Error, int) -> void) : void;
+    function ZADD(key : string, members : variant[]) : void;
+    function ZADD(key : string, members : variant[], callback : (Error) -> void) : void;
+    function ZADD(key : string, members : variant[], callback : (Error, int) -> void) : void;
+
+    function zcard(key : string, callback : (Error, int) -> void) : void;
+    function ZCARD(key : string, callback : (Error, int) -> void) : void;
+
+    function zcount(key : string, min : int, max : int, callback : (Error, int) -> void) : void;
+    function ZCOUNT(key : string, min : int, max : int, callback : (Error, int) -> void) : void;
+
+    function zincrby(key : string, increment : int, member : string) : void;
+    function zincrby(key : string, increment : int, member : string, callback : (Error) -> void) : void;
+    function zincrby(key : string, increment : int, member : string, callback : (Error, string) -> void) : void;
+    function ZINCRBY(key : string, increment : int, member : string) : void;
+    function ZINCRBY(key : string, increment : int, member : string, callback : (Error) -> void) : void;
+    function ZINCRBY(key : string, increment : int, member : string, callback : (Error, string) -> void) : void;
+
     function zinterstore() : void;
     function ZINTERSTORE() : void;
     function zrange() : void;
