@@ -10,18 +10,56 @@ import "js/nodejs.jsx";
 
 native class redis
 {
+    static var debug_mode : boolean;
     static function createClient() : RedisClient;
     static function createClient(port : Nullable.<int>) : RedisClient;
     static function createClient(port : Nullable.<int>, host : Nullable.<string>) : RedisClient;
     static function createClient(port : Nullable.<int>, host : Nullable.<string>, options : Map.<variant>) : RedisClient;
 } = '''
 require('redis');
+
+(function () {
+var RedisClient = require('redis').RedisClient;
+var twoWordsCommands = [
+    'script exists', 'script kill', 'script flush', 'script load',
+    'client kill', 'client list', 'client getname', 'client setname',
+    'config get', 'config rewrite', 'config set', 'config resetstat',
+    'debug object', 'debug segfault',
+    'object refcount', 'object encoding', 'object idletime'];
+
+twoWordsCommands.forEach(function (command) {
+    var words = command.split(' ');
+    var lowerCaseCommand = words.join('');
+    var upperCaseCommand = [words[0].toUpperCase(), words[1].toUpperCase()].join('');
+    RedisClient.prototype[lowerCaseCommand] = function () {
+        var args = Array.prototype.slice.call(arguments);
+        args.unshift(words[1]);
+        return this.send_command(words[0], args);
+    };
+    RedisClient.prototype[upperCaseCommand] = RedisClient.prototype[lowerCaseCommand];
+});
+})();
 ''';
 
-native __fake__ class RedisClient extends EventEmitter
+abstract native __fake__ class RedisClient extends EventEmitter // implements RedisCommands
 {
-
     function end() : void;
+
+    function auth (password : string, callback : (Error) -> void) : void;
+    function auth (password : string, callback : (Error, string) -> void) : void;
+    function AUTH (password : string, callback : (Error) -> void) : void;
+    function AUTH (password : string, callback : (Error, string) -> void) : void;
+
+    //function multi() : RedisCommands;
+    //function MULTI() : RedisCommands;
+
+/*abstract native __fake__ class RedisTransaction implements RedisCommands
+{
+    function exec (callback : (Error) -> void) : void;
+    function exec (callback : (Error, string[]) -> void) : void;
+    function EXEC (callback : (Error) -> void) : void;
+    function EXEC (callback : (Error, string[]) -> void) : void;
+}*/
 
     function append(key : string, value : string) : void;
     function append(key : string, value : string, callback : (Error) -> void) : void;
@@ -29,11 +67,6 @@ native __fake__ class RedisClient extends EventEmitter
     function APPEND(key : string, value : string) : void;
     function APPEND(key : string, value : string, callback : (Error) -> void) : void;
     function APPEND(key : string, value : string, callback : (Error, int) -> void) : void;
-
-    function auth (password : string, callback : (Error) -> void) : void;
-    function auth (password : string, callback : (Error, string) -> void) : void;
-    function AUTH (password : string, callback : (Error) -> void) : void;
-    function AUTH (password : string, callback : (Error, string) -> void) : void;
 
     function bgrewriteaof() : void;
     function bgrewriteaof(callback : (Error) -> void) : void;
@@ -68,34 +101,46 @@ native __fake__ class RedisClient extends EventEmitter
     function BITCOUNT(key : string, start : int, end : int, callback : (Error) -> void) : void;
     function BITCOUNT(key : string, start : int, end : int, callback : (Error, int) -> void) : void;
 
+    function bitop(operation : string, destkey : string, srckey : string) : void;
+    function bitop(operation : string, destkey : string, srckey : string, callback : (Error) -> void) : void;
+    function bitop(operation : string, destkey : string, srckey : string, callback : (Error, int) -> void) : void;
     function bitop(operation : string, destkey : string, srckey : string[]) : void;
-    function BITOP(operation : string, destkey : string, srckey : string[]) : void;
-    function blpop() : void;
-    function BLPOP() : void;
-    function brpop() : void;
-    function BRPOP() : void;
-    function brpoplpush() : void;
-    function BRPOPLPUSH() : void;
-   /* function client kill() : void;
-    function CLIENT kill() : void;
-    function client list() : void;
-    function CLIENT list() : void;
-    function client getname() : void;
-    function CLIENT getname() : void;
-    function client setname() : void;
-    function CLIENT setname() : void;
-    function config get() : void;
-    function CONFIG get() : void;
-    function config set() : void;
-    function CONFIG set() : void;
-    function config resetstat() : void;
-    function CONFIG resetstat() : void;*/
+    function bitop(operation : string, destkey : string, srckey : string[], callback : (Error) -> void) : void;
+    function bitop(operation : string, destkey : string, srckey : string[], callback : (Error, int) -> void) : void;
+
+    function blpop(key : string, timeout : int, callback : (Error, string[]) -> void) : void;
+    function blpop(keys : string[], timeout : int, callback : (Error, string[]) -> void) : void;
+    function BLPOP(key : string, timeout : int, callback : (Error, string[]) -> void) : void;
+    function BLPOP(keys : string[], timeout : int, callback : (Error, string[]) -> void) : void;
+
+    function brpop(key : string, timeout : int, callback : (Error, string[]) -> void) : void;
+    function brpop(keys : string[], timeout : int, callback : (Error, string[]) -> void) : void;
+    function BRPOP(key : string, timeout : int, callback : (Error, string[]) -> void) : void;
+    function BRPOP(keys : string[], timeout : int, callback : (Error, string[]) -> void) : void;
+
+    function brpoplpush(source : string, destination : string, timeout : int, callback : (Error, string[]) -> void) : void;
+    function BRPOPLPUSH(source : string, destination : string, timeout : int, callback : (Error, string[]) -> void) : void;
+
+    function clientkill() : void;
+    function CLIENTKILL() : void;
+    function clientlist(callback : (Error, string[]) -> void) : void;
+    function CLIENTLIST(callback : (Error, string[]) -> void) : void;
+    function clientgetname() : void;
+    function CLIENTGETNAME() : void;
+    function clientsetname() : void;
+    function CLIENTSETNAME() : void;
+    function configget() : void;
+    function CONFIGGET() : void;
+    function configset() : void;
+    function CONFIGSET() : void;
+    function configresetstat() : void;
+    function CONFIGRESETSTAT() : void;
     function dbsize() : void;
     function DBSIZE() : void;
-    /*function debug object() : void;
-    function DEBUG object() : void;
-    function debug segfault() : void;
-    function DEBUG segfault() : void;*/
+    function debugobject() : void;
+    function DEBUGOBJECT() : void;
+    function debugsegfault() : void;
+    function DEBUGSEGFAULT() : void;
 
     function decr(key : string) : void;
     function decr(key : string, callback : (Error) -> void) : void;
@@ -136,8 +181,8 @@ native __fake__ class RedisClient extends EventEmitter
     function EVAL() : void;
     function evalsha() : void;
     function EVALSHA() : void;
-    function exec() : void;
-    function EXEC() : void;
+    //function exec() : void;
+    //function EXEC() : void;
 
     function exists(key : string) : void;
     function exists(key : string, callback : (Error) -> void) : void;
@@ -168,42 +213,93 @@ native __fake__ class RedisClient extends EventEmitter
     function get(key : string, callback : (Error, string) -> void) : void;
     function GET(key : string, callback : (Error, string) -> void) : void;
 
-    function getbit() : void;
-    function GETBIT() : void;
-    function getrange() : void;
-    function GETRANGE() : void;
-    function getset() : void;
-    function GETSET() : void;
-    function hdel() : void;
-    function HDEL() : void;
-    function hexists() : void;
-    function HEXISTS() : void;
-    function hget() : void;
-    function HGET() : void;
-    function hgetall() : void;
-    function HGETALL() : void;
-    function hincrby() : void;
-    function HINCRBY() : void;
-    function hincrbyfloat() : void;
-    function HINCRBYFLOAT() : void;
-    function hkeys() : void;
-    function HKEYS() : void;
-    function hlen() : void;
-    function HLEN() : void;
-    function hmget() : void;
-    function HMGET() : void;
+    function getbit(key : string, offset : int, callback : (Error, int) -> void) : void;
+    function GETBIT(key : string, offset : int, callback : (Error, int) -> void) : void;
+
+    function getrange(key : string, start : int, end : int, callback : (Error, string) -> void) : void;
+    function GETRANGE(key : string, start : int, end : int, callback : (Error, string) -> void) : void;
+
+    function getset(key : string, value : string, callback : (Error, string) -> void) : void;
+    function GETSET(key : string, value : string, callback : (Error, string) -> void) : void;
+
+    function hdel(key : string, field : string) : void;
+    function hdel(key : string, field : string, callback : (Error) -> void) : void;
+    function hdel(key : string, field : string, callback : (Error, int) -> void) : void;
+    function hdel(key : string, fields : string[]) : void;
+    function hdel(key : string, fields : string[], callback : (Error) -> void) : void;
+    function hdel(key : string, fields : string[], callback : (Error, int) -> void) : void;
+    function HDEL(key : string, field : string) : void;
+    function HDEL(key : string, field : string, callback : (Error) -> void) : void;
+    function HDEL(key : string, field : string, callback : (Error, int) -> void) : void;
+    function HDEL(key : string, fields : string[]) : void;
+    function HDEL(key : string, fields : string[], callback : (Error) -> void) : void;
+    function HDEL(key : string, fields : string[], callback : (Error, int) -> void) : void;
+
+    function hexists(key : string, field : string) : void;
+    function hexists(key : string, field : string, callback : (Error) -> void) : void;
+    function hexists(key : string, field : string, callback : (Error, int) -> void) : void;
+    function HEXISTS(key : string, field : string) : void;
+    function HEXISTS(key : string, field : string, callback : (Error) -> void) : void;
+    function HEXISTS(key : string, field : string, callback : (Error, int) -> void) : void;
+
+    function hget(key : string, field : string, callback : (Error, Nullable.<string>) -> void) : void;
+    function HGET(key : string, field : string, callback : (Error, Nullable.<string>) -> void) : void;
+
+    function hgetall(key : string, callback : (Error, string[]) -> void) : void;
+    function HGETALL(key : string, callback : (Error, string[]) -> void) : void;
+
+    function hincrby(key : string, field : string, increment : int) : void;
+    function hincrby(key : string, field : string, increment : int, callback : (Error) -> void) : void;
+    function hincrby(key : string, field : string, increment : int, callback : (Error, int) -> void) : void;
+    function HINCRBY(key : string, field : string, increment : int) : void;
+    function HINCRBY(key : string, field : string, increment : int, callback : (Error) -> void) : void;
+    function HINCRBY(key : string, field : string, increment : int, callback : (Error, int) -> void) : void;
+
+    function hincrbyfloat(key : string, field : string, increment : number) : void;
+    function hincrbyfloat(key : string, field : string, increment : number, callback : (Error) -> void) : void;
+    function hincrbyfloat(key : string, field : string, increment : number, callback : (Error, string) -> void) : void;
+    function HINCRBYFLOAT(key : string, field : string, increment : number) : void;
+    function HINCRBYFLOAT(key : string, field : string, increment : number, callback : (Error) -> void) : void;
+    function HINCRBYFLOAT(key : string, field : string, increment : number, callback : (Error, string) -> void) : void;
+
+    function hkeys(key : string, callback : (Error, string[]) -> void) : void;
+    function HKEYS(key : string, callback : (Error, string[]) -> void) : void;
+
+    function hlen(key : string, callback : (Error, int) -> void) : void;
+    function HLEN(key : string, callback : (Error, int) -> void) : void;
+
+    function hmget(keys : string, field : string[], callback : (Error, Map.<string>) -> void) : void;
+    function HMGET(keys : string, field : string[], callback : (Error, Map.<string>) -> void) : void;
+
+    function hmset(hash : string, obj : string[]) : void;
+    function hmset(hash : string, obj : string[], callback : (Error) -> void) : void;
+    function hmset(hash : string, obj : string[], callback : (Error, string) -> void) : void;
+    function HMSET(hash : string, obj : string[]) : void;
+    function HMSET(hash : string, obj : string[], callback : (Error) -> void) : void;
+    function HMSET(hash : string, obj : string[], callback : (Error, string) -> void) : void;
     function hmset(hash : string, obj : Map.<string>) : void;
     function hmset(hash : string, obj : Map.<string>, callback : (Error) -> void) : void;
     function hmset(hash : string, obj : Map.<string>, callback : (Error, string) -> void) : void;
     function HMSET(hash : string, obj : Map.<string>) : void;
     function HMSET(hash : string, obj : Map.<string>, callback : (Error) -> void) : void;
     function HMSET(hash : string, obj : Map.<string>, callback : (Error, string) -> void) : void;
-    function hset() : void;
-    function HSET() : void;
-    function hsetnx() : void;
-    function HSETNX() : void;
-    function hvals() : void;
-    function HVALS() : void;
+
+    function hset(key : string, field : string, value : string) : void;
+    function hset(key : string, field : string, value : string, callback : (Error) -> void) : void;
+    function hset(key : string, field : string, value : string, callback : (Error, int) -> void) : void;
+    function HSET(key : string, field : string, value : string) : void;
+    function HSET(key : string, field : string, value : string, callback : (Error) -> void) : void;
+    function HSET(key : string, field : string, value : string, callback : (Error, int) -> void) : void;
+
+    function hsetnx(key : string, field : string, value : string) : void;
+    function hsetnx(key : string, field : string, value : string, callback : (Error) -> void) : void;
+    function hsetnx(key : string, field : string, value : string, callback : (Error, int) -> void) : void;
+    function HSETNX(key : string, field : string, value : string) : void;
+    function HSETNX(key : string, field : string, value : string, callback : (Error) -> void) : void;
+    function HSETNX(key : string, field : string, value : string, callback : (Error, int) -> void) : void;
+
+    function hvals(key : string, callback : (Error, string[]) -> void) : void;
+    function HVALS(key : string, callback : (Error, string[]) -> void) : void;
 
     function incr(key : string) : void;
     function incr(key : string, callback : (Error) -> void) : void;
@@ -214,10 +310,10 @@ native __fake__ class RedisClient extends EventEmitter
 
     function incrby(key : string, increment : int) : void;
     function incrby(key : string, increment : int, callback : (Error) -> void) : void;
-    function incrby(key : string, increment : int, callback : (Error, string) -> void) : void;
+    function incrby(key : string, increment : int, callback : (Error, int) -> void) : void;
     function INCRBY(key : string, increment : int) : void;
     function INCRBY(key : string, increment : int, callback : (Error) -> void) : void;
-    function INCRBY(key : string, increment : int, callback : (Error, string) -> void) : void;
+    function INCRBY(key : string, increment : int, callback : (Error, int) -> void) : void;
 
     function incrbyfloat(key : string, increment : number) : void;
     function incrbyfloat(key : string, increment : number, callback : (Error) -> void) : void;
@@ -234,26 +330,68 @@ native __fake__ class RedisClient extends EventEmitter
 
     function lastsave() : void;
     function LASTSAVE() : void;
-    function lindex() : void;
-    function LINDEX() : void;
-    function linsert() : void;
-    function LINSERT() : void;
-    function llen() : void;
-    function LLEN() : void;
-    function lpop() : void;
-    function LPOP() : void;
-    function lpush() : void;
-    function LPUSH() : void;
-    function lpushx() : void;
-    function LPUSHX() : void;
-    function lrange() : void;
-    function LRANGE() : void;
-    function lrem() : void;
-    function LREM() : void;
-    function lset() : void;
-    function LSET() : void;
-    function ltrim() : void;
-    function LTRIM() : void;
+
+    function lindex(key : string, value : string, callback : (Error, int) -> void) : void;
+    function LINDEX(key : string, value : string, callback : (Error, int) -> void) : void;
+
+    function linsert(key : string, direction : string, pivot : string, value : string) : void;
+    function linsert(key : string, direction : string, pivot : string, value : string, callback : (Error) -> void) : void;
+    function linsert(key : string, direction : string, pivot : string, value : string, callback : (Error, int) -> void) : void;
+    function LINSERT(key : string, direction : string, pivot : string, value : string) : void;
+    function LINSERT(key : string, direction : string, pivot : string, value : string, callback : (Error) -> void) : void;
+    function LINSERT(key : string, direction : string, pivot : string, value : string, callback : (Error, int) -> void) : void;
+
+    function llen(key : string, callback : (Error, int) -> void) : void;
+    function LLEN(key : string, callback : (Error, int) -> void) : void;
+
+    function lpop(key : string, callback : (Error, string[]) -> void) : void;
+    function lpop(keys : string[], callback : (Error, string[]) -> void) : void;
+    function LPOP(key : string, callback : (Error, string[]) -> void) : void;
+    function LPOP(keys : string[], callback : (Error, string[]) -> void) : void;
+
+    function lpush(key : string, value : string) : void;
+    function lpush(key : string, value : string, callback : (Error) -> void) : void;
+    function lpush(key : string, value : string, callback : (Error, int) -> void) : void;
+    function lpush(key : string, values : string[]) : void;
+    function lpush(key : string, values : string[], callback : (Error) -> void) : void;
+    function lpush(key : string, values : string[], callback : (Error, int) -> void) : void;
+    function LPUSH(key : string, value : string) : void;
+    function LPUSH(key : string, value : string, callback : (Error) -> void) : void;
+    function LPUSH(key : string, value : string, callback : (Error, int) -> void) : void;
+    function LPUSH(key : string, values : string[]) : void;
+    function LPUSH(key : string, values : string[], callback : (Error) -> void) : void;
+    function LPUSH(key : string, values : string[], callback : (Error, int) -> void) : void;
+
+    function lpushx(key : string, value : string) : void;
+    function lpushx(key : string, value : string, callback : (Error) -> void) : void;
+    function lpushx(key : string, value : string, callback : (Error, int) -> void) : void;
+    function LPUSHX(key : string, value : string) : void;
+    function LPUSHX(key : string, value : string, callback : (Error) -> void) : void;
+    function LPUSHX(key : string, value : string, callback : (Error, int) -> void) : void;
+
+    function lrange(key : string, start : int, stop : int, callback : (Error, string[]) -> void) : void;
+    function LRANGE(key : string, start : int, stop : int, callback : (Error, string[]) -> void) : void;
+
+    function lrem(key : string, count : int, value : string) : void;
+    function lrem(key : string, count : int, value : string, callback : (Error) -> void) : void;
+    function lrem(key : string, count : int, value : string, callback : (Error, int) -> void) : void;
+    function LREM(key : string, count : int, value : string) : void;
+    function LREM(key : string, count : int, value : string, callback : (Error) -> void) : void;
+    function LREM(key : string, count : int, value : string, callback : (Error, int) -> void) : void;
+
+    function lset(key : string, index : int, value : string) : void;
+    function lset(key : string, index : int, value : string, callback : (Error) -> void) : void;
+    function lset(key : string, index : int, value : string, callback : (Error, string) -> void) : void;
+    function LSET(key : string, index : int, value : string) : void;
+    function LSET(key : string, index : int, value : string, callback : (Error) -> void) : void;
+    function LSET(key : string, index : int, value : string, callback : (Error, string) -> void) : void;
+
+    function ltrim(key : string, start : int, stop : int) : void;
+    function ltrim(key : string, start : int, stop : int, callback : (Error) -> void) : void;
+    function ltrim(key : string, start : int, stop : int, callback : (Error, string) -> void) : void;
+    function LTRIM(key : string, start : int, stop : int) : void;
+    function LTRIM(key : string, start : int, stop : int, callback : (Error) -> void) : void;
+    function LTRIM(key : string, start : int, stop : int, callback : (Error, string) -> void) : void;
 
     function mget(keys : string[], callback : (Error, string[]) -> void) : void;
     function MGET(keys : string[], callback : (Error, string[]) -> void) : void;
@@ -282,12 +420,19 @@ native __fake__ class RedisClient extends EventEmitter
     function MSET(items : string[], value : string, callback : (Error) -> void) : void;
     function MSET(items : string[], value : string, callback : (Error, string) -> void) : void;
 
-    function msetnx() : void;
-    function MSETNX() : void;
-    function multi() : void;
-    function MULTI() : void;
-    function object() : void;
-    function OBJECT() : void;
+    function msetnx(items : string[]) : void;
+    function msetnx(items : string[], callback : (Error) -> void) : void;
+    function msetnx(items : string[], value : string, callback : (Error, int) -> void) : void;
+    function MSETNX(items : string[], value : string) : void;
+    function MSETNX(items : string[], value : string, callback : (Error) -> void) : void;
+    function MSETNX(items : string[], value : string, callback : (Error, int) -> void) : void;
+
+    function objectrefcount(key : string, callback : (Error, int) -> void) : void;
+    function OBJECTREFCOUNT(key : string, callback : (Error, int) -> void) : void;
+    function objectencoding(key : string, callback : (Error, string) -> void) : void;
+    function OBJECTENCODING(key : string, callback : (Error, string) -> void) : void;
+    function objectidletime(key : string, callback : (Error, int) -> void) : void;
+    function OBJECTIDLETIME(key : string, callback : (Error, int) -> void) : void;
 
     function persist(key : string) : void;
     function persist(key : string, callback : (Error) -> void) : void;
@@ -312,8 +457,14 @@ native __fake__ class RedisClient extends EventEmitter
 
     function ping() : void;
     function PING() : void;
-    function psetex() : void;
-    function PSETEX() : void;
+
+    function psetex(key : string, milliseconds : int, value : string) : void;
+    function psetex(key : string, milliseconds : int, value : string, callback : (Error) -> void) : void;
+    function psetex(key : string, milliseconds : int, value : string, callback : (Error, string) -> void) : void;
+    function PSETEX(key : string, milliseconds : int, value : string) : void;
+    function PSETEX(key : string, milliseconds : int, value : string, callback : (Error) -> void) : void;
+    function PSETEX(key : string, milliseconds : int, value : string, callback : (Error, string) -> void) : void;
+
     function psubscribe() : void;
     function PSUBSCRIBE() : void;
 
@@ -351,28 +502,48 @@ native __fake__ class RedisClient extends EventEmitter
     function RESTORE(key : string, ttl : int, serializedValue : string, callback : (Error) -> void) : void;
     function RESTORE(key : string, ttl : int, serializedValue : string, callback : (Error, string) -> void) : void;
 
-    function rpop() : void;
-    function RPOP() : void;
-    function rpoplpush() : void;
-    function RPOPLPUSH() : void;
-    function rpush() : void;
-    function RPUSH() : void;
-    function rpushx() : void;
-    function RPUSHX() : void;
+    function rpop(key : string, callback : (Error, string[]) -> void) : void;
+    function rpop(keys : string[], callback : (Error, string[]) -> void) : void;
+    function RPOP(key : string, callback : (Error, string[]) -> void) : void;
+    function RPOP(keys : string[], callback : (Error, string[]) -> void) : void;
+
+    function rpoplpush(source : string, destination : string, callback : (Error, string[]) -> void) : void;
+    function RPOPLPUSH(source : string, destination : string, callback : (Error, string[]) -> void) : void;
+
+    function rpush(key : string, value : string) : void;
+    function rpush(key : string, value : string, callback : (Error) -> void) : void;
+    function rpush(key : string, value : string, callback : (Error, int) -> void) : void;
+    function rpush(key : string, values : string[]) : void;
+    function rpush(key : string, values : string[], callback : (Error) -> void) : void;
+    function rpush(key : string, values : string[], callback : (Error, int) -> void) : void;
+    function RPUSH(key : string, value : string) : void;
+    function RPUSH(key : string, value : string, callback : (Error) -> void) : void;
+    function RPUSH(key : string, value : string, callback : (Error, int) -> void) : void;
+    function RPUSH(key : string, values : string[]) : void;
+    function RPUSH(key : string, values : string[], callback : (Error) -> void) : void;
+    function RPUSH(key : string, values : string[], callback : (Error, int) -> void) : void;
+
+    function rpushx(key : string, value : string) : void;
+    function rpushx(key : string, value : string, callback : (Error) -> void) : void;
+    function rpushx(key : string, value : string, callback : (Error, int) -> void) : void;
+    function RPUSHX(key : string, value : string) : void;
+    function RPUSHX(key : string, value : string, callback : (Error) -> void) : void;
+    function RPUSHX(key : string, value : string, callback : (Error, int) -> void) : void;
+
     function sadd() : void;
     function SADD() : void;
     function save() : void;
     function SAVE() : void;
     function scard() : void;
     function SCARD() : void;
-    /*function script exists() : void;
-    function SCRIPT exists() : void;
-    function script flush() : void;
-    function SCRIPT flush() : void;
-    function script kill() : void;
-    function SCRIPT kill() : void;
-    function script load() : void;
-    function SCRIPT load() : void;*/
+    function scriptexists() : void;
+    function SCRIPTEXISTS() : void;
+    function scriptflush() : void;
+    function SCRIPTFLUSH() : void;
+    function scriptkill() : void;
+    function SCRIPTKILL() : void;
+    function scriptload() : void;
+    function SCRIPTLOAD() : void;
     function sdiff() : void;
     function SDIFF() : void;
     function sdiffstore() : void;
@@ -387,8 +558,12 @@ native __fake__ class RedisClient extends EventEmitter
     function SET(key : string, value : string, callback : (Error) -> void) : void;
     function SET(key : string, value : string, callback : (Error, string) -> void) : void;
 
-    function setbit() : void;
-    function SETBIT() : void;
+    function setbit(key : string, offset : int, value : int) : void;
+    function setbit(key : string, offset : int, value : int, callback : (Error) -> void) : void;
+    function setbit(key : string, offset : int, value : int, callback : (Error, int) -> void) : void;
+    function SETBIT(key : string, offset : int, value : int) : void;
+    function SETBIT(key : string, offset : int, value : int, callback : (Error) -> void) : void;
+    function SETBIT(key : string, offset : int, value : int, callback : (Error, int) -> void) : void;
 
     function setex(key : string, seconds : int, value : string) : void;
     function setex(key : string, seconds : int, value : string, callback : (Error) -> void) : void;
@@ -402,10 +577,15 @@ native __fake__ class RedisClient extends EventEmitter
     function setnx(key : string, value : string, callback : (Error, int) -> void) : void;
     function SETNX(key : string, value : string) : void;
     function SETNX(key : string, value : string, callback : (Error) -> void) : void;
-    function SETEX(key : string, value : string, callback : (Error, int) -> void) : void;
+    function SETNX(key : string, value : string, callback : (Error, int) -> void) : void;
 
-    function setrange() : void;
-    function SETRANGE() : void;
+    function setrange(key : string, offset : int, value : string) : void;
+    function setrange(key : string, offset : int, value : string, callback : (Error) -> void) : void;
+    function setrange(key : string, offset : int, value : string, callback : (Error, int) -> void) : void;
+    function SETRANGE(key : string, offset : int, value : string) : void;
+    function SETRANGE(key : string, offset : int, value : string, callback : (Error) -> void) : void;
+    function SETRANGE(key : string, offset : int, value : string, callback : (Error, int) -> void) : void;
+
     function shutdown() : void;
     function SHUTDOWN() : void;
     function sinter() : void;
@@ -422,8 +602,20 @@ native __fake__ class RedisClient extends EventEmitter
     function SMEMBERS() : void;
     function smove() : void;
     function SMOVE() : void;
-    function sort() : void;
-    function SORT() : void;
+
+    function sort(key : string) : void;
+    function sort(key : string, callback : (Error) -> void) : void;
+    function sort(key : string, callback : (Error, string[]) -> void) : void;
+    function sort(key : string, params : string[]) : void;
+    function sort(key : string, params : string[], callback : (Error) -> void) : void;
+    function sort(key : string, params : string[], callback : (Error, string[]) -> void) : void;
+    function SORT(key : string) : void;
+    function SORT(key : string, callback : (Error) -> void) : void;
+    function SORT(key : string, callback : (Error, string[]) -> void) : void;
+    function SORT(key : string, params : string[]) : void;
+    function SORT(key : string, params : string[], callback : (Error) -> void) : void;
+    function SORT(key : string, params : string[], callback : (Error, string[]) -> void) : void;
+
     function spop() : void;
     function SPOP() : void;
     function srandmember() : void;
