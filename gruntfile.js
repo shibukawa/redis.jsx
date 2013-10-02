@@ -23,14 +23,14 @@ module.exports = function(grunt) {
       build: {
         src: ['<%= sampleDir %>/*.jsx'],
         add_search_path: ['<%= libDir %>'],
-        dest: '<%= sampleDir %>/redis-sample',
+        dest: '<%= sampleDir %>/',
         executable: 'node'
       },
 
       test: {
         src: ['<%= testDir %>/*.jsx'],
         add_search_path: ['<%= libDir %>'],
-        args: '--test'
+        test: true
       },
 
       doc: {

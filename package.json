@@ -31,7 +31,7 @@
   "devDependencies": {
     "grunt-contrib-watch": "~0.5.3",
     "grunt": "~0.4.1",
-    "grunt-jsx": "~0.0.4"
+    "grunt-jsx": ">=0.1.1"
   },
   "author": "shibukawa",
   "license": "MIT",
