@@ -5,7 +5,7 @@ class _Main {
     static function main(argv : string[]) : void
     {
         var client = redis.createClient();
-        /*client.mset(["testkey", "testvalue", "testkey2", "testvalue2"], function (err : Error) : void {
+        client.mset(["testkey", "testvalue", "testkey2", "testvalue2"], function (err : Error) : void {
             if (err)
             {
                 console.log(err);
@@ -17,9 +17,14 @@ class _Main {
                     client.end();
                 });
             }
-        });*/
-        client.set("testvalue", "10");
+        });
+        /*client.set("testvalue", "10");
         client.incrbyfloat("testvalue", 10.5, function (err : Error, ret : string) : void {
+            console.log(ret);
+            client.end();
+        });*/
+
+        client.clientlist(function (err : Error, ret : string[]) : void {
             console.log(ret);
             client.end();
         });

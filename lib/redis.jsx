@@ -758,28 +758,113 @@ abstract native __fake__ class RedisClient extends EventEmitter // implements Re
     function ZINCRBY(key : string, increment : int, member : string, callback : (Error) -> void) : void;
     function ZINCRBY(key : string, increment : int, member : string, callback : (Error, string) -> void) : void;
 
-    function zinterstore() : void;
-    function ZINTERSTORE() : void;
-    function zrange() : void;
-    function ZRANGE() : void;
-    function zrangebyscore() : void;
-    function ZRANGEBYSCORE() : void;
-    function zrank() : void;
-    function ZRANK() : void;
-    function zrem() : void;
-    function ZREM() : void;
-    function zremrangebyrank() : void;
-    function ZREMRANGEBYRANK() : void;
-    function zremrangebyscore() : void;
-    function ZREMRANGEBYSCORE() : void;
-    function zrevrange() : void;
-    function ZREVRANGE() : void;
-    function zrevrangebyscore() : void;
-    function ZREVRANGEBYSCORE() : void;
-    function zrevrank() : void;
-    function ZREVRANK() : void;
-    function zscore() : void;
-    function ZSCORE() : void;
-    function zunionstore() : void;
-    function ZUNIONSTORE() : void;
+    function zinterstore(destination : string, numkeys : int, params : string[]) : void;
+    function zinterstore(destination : string, numkeys : int, params : string[], callback : (Error) -> void) : void;
+    function zinterstore(destination : string, numkeys : int, params : string[], callback : (Error, int) -> void) : void;
+    function ZINTERSTORE(destination : string, numkeys : int, params : string[]) : void;
+    function ZINTERSTORE(destination : string, numkeys : int, params : string[], callback : (Error) -> void) : void;
+    function ZINTERSTORE(destination : string, numkeys : int, params : string[], callback : (Error, int) -> void) : void;
+
+    function zrange(key : string, start : int, end : int, callback : (Error, string[]) -> void) : void;
+    function zrange(key : string, start : int, end : int, withscore : string, callback : (Error, variant[]) -> void) : void;
+    function ZRANGE(key : string, start : int, end : int, callback : (Error, string[]) -> void) : void;
+    function ZRANGE(key : string, start : int, end : int, withscore : string, callback : (Error, variant[]) -> void) : void;
+
+    function zrangebyscore(key : string, min : int, max : int, callback : (Error, string[]) -> void) : void;
+    function zrangebyscore(key : string, min : int, max : int, option : variant[], callback : (Error, variant[]) -> void) : void;
+    function zrangebyscore(key : string, min : int, max : int, option : string[], callback : (Error, variant[]) -> void) : void;
+    function zrangebyscore(key : string, min : string, max : int, callback : (Error, string[]) -> void) : void;
+    function zrangebyscore(key : string, min : string, max : int, option : variant[], callback : (Error, variant[]) -> void) : void;
+    function zrangebyscore(key : string, min : string, max : int, option : string[], callback : (Error, variant[]) -> void) : void;
+    function zrangebyscore(key : string, min : int, max : string, callback : (Error, string[]) -> void) : void;
+    function zrangebyscore(key : string, min : int, max : string, option : variant[], callback : (Error, variant[]) -> void) : void;
+    function zrangebyscore(key : string, min : int, max : string, option : string[], callback : (Error, variant[]) -> void) : void;
+    function zrangebyscore(key : string, min : string, max : string, callback : (Error, string[]) -> void) : void;
+    function zrangebyscore(key : string, min : string, max : string, option : variant[], callback : (Error, variant[]) -> void) : void;
+    function zrangebyscore(key : string, min : string, max : string, option : string[], callback : (Error, variant[]) -> void) : void;
+    function ZRANGEBYSCORE(key : string, min : int, max : int, callback : (Error, string[]) -> void) : void;
+    function ZRANGEBYSCORE(key : string, min : int, max : int, option : variant[], callback : (Error, variant[]) -> void) : void;
+    function ZRANGEBYSCORE(key : string, min : int, max : int, option : string[], callback : (Error, variant[]) -> void) : void;
+    function ZRANGEBYSCORE(key : string, min : string, max : int, callback : (Error, string[]) -> void) : void;
+    function ZRANGEBYSCORE(key : string, min : string, max : int, option : variant[], callback : (Error, variant[]) -> void) : void;
+    function ZRANGEBYSCORE(key : string, min : string, max : int, option : string[], callback : (Error, variant[]) -> void) : void;
+    function ZRANGEBYSCORE(key : string, min : int, max : string, callback : (Error, string[]) -> void) : void;
+    function ZRANGEBYSCORE(key : string, min : int, max : string, option : variant[], callback : (Error, variant[]) -> void) : void;
+    function ZRANGEBYSCORE(key : string, min : int, max : string, option : string[], callback : (Error, variant[]) -> void) : void;
+    function ZRANGEBYSCORE(key : string, min : string, max : string, callback : (Error, string[]) -> void) : void;
+    function ZRANGEBYSCORE(key : string, min : string, max : string, option : variant[], callback : (Error, variant[]) -> void) : void;
+    function ZRANGEBYSCORE(key : string, min : string, max : string, option : string[], callback : (Error, variant[]) -> void) : void;
+
+    function zrank(key : string, member : string, callback : (Error, int) -> void) : void;
+    function ZRANK(key : string, member : string, callback : (Error, int) -> void) : void;
+
+    function zrem(key : string, member : string) : void;
+    function zrem(key : string, member : string[]) : void;
+    function zrem(key : string, member : string, callback : (Error) -> void) : void;
+    function zrem(key : string, member : string[], callback : (Error) -> void) : void;
+    function zrem(key : string, member : string, callback : (Error, int) -> void) : void;
+    function zrem(key : string, member : string[], callback : (Error, int) -> void) : void;
+    function ZREM(key : string, member : string) : void;
+    function ZREM(key : string, member : string[]) : void;
+    function ZREM(key : string, member : string, callback : (Error) -> void) : void;
+    function ZREM(key : string, member : string[], callback : (Error) -> void) : void;
+    function ZREM(key : string, member : string, callback : (Error, int) -> void) : void;
+    function ZREM(key : string, member : string[], callback : (Error, int) -> void) : void;
+
+    function zremrangebyrank(key : string, start : int, stop : int) : void;
+    function zremrangebyrank(key : string, start : int, stop : int, callback : (Error) -> void) : void;
+    function zremrangebyrank(key : string, start : int, stop : int, callback : (Error, int) -> void) : void;
+    function ZREMRANGEBYRANK(key : string, start : int, stop : int) : void;
+    function ZREMRANGEBYRANK(key : string, start : int, stop : int, callback : (Error) -> void) : void;
+    function ZREMRANGEBYRANK(key : string, start : int, stop : int, callback : (Error, int) -> void) : void;
+
+    function zremrangebyscore(key : string, min : int, max : int) : void;
+    function zremrangebyscore(key : string, min : int, max : int, callback : (Error) -> void) : void;
+    function zremrangebyscore(key : string, min : int, max : int, callback : (Error, int) -> void) : void;
+    function ZREMRANGEBYSCORE(key : string, min : int, max : int) : void;
+    function ZREMRANGEBYSCORE(key : string, min : int, max : int, callback : (Error) -> void) : void;
+    function ZREMRANGEBYSCORE(key : string, min : int, max : int, callback : (Error, int) -> void) : void;
+
+    function zrevrange(key : string, start : int, end : int, callback : (Error, string[]) -> void) : void;
+    function zrevrange(key : string, start : int, end : int, withscore : string, callback : (Error, variant[]) -> void) : void;
+    function ZREVRANGE(key : string, start : int, end : int, callback : (Error, string[]) -> void) : void;
+    function ZREVRANGE(key : string, start : int, end : int, withscore : string, callback : (Error, variant[]) -> void) : void;
+
+    function zrevrangebyscore(key : string, min : int, max : int, callback : (Error, string[]) -> void) : void;
+    function zrevrangebyscore(key : string, min : int, max : int, option : variant[], callback : (Error, variant[]) -> void) : void;
+    function zrevrangebyscore(key : string, min : int, max : int, option : string[], callback : (Error, variant[]) -> void) : void;
+    function zrevrangebyscore(key : string, min : string, max : int, callback : (Error, string[]) -> void) : void;
+    function zrevrangebyscore(key : string, min : string, max : int, option : variant[], callback : (Error, variant[]) -> void) : void;
+    function zrevrangebyscore(key : string, min : string, max : int, option : string[], callback : (Error, variant[]) -> void) : void;
+    function zrevrangebyscore(key : string, min : int, max : string, callback : (Error, string[]) -> void) : void;
+    function zrevrangebyscore(key : string, min : int, max : string, option : variant[], callback : (Error, variant[]) -> void) : void;
+    function zrevrangebyscore(key : string, min : int, max : string, option : string[], callback : (Error, variant[]) -> void) : void;
+    function zrevrangebyscore(key : string, min : string, max : string, callback : (Error, string[]) -> void) : void;
+    function zrevrangebyscore(key : string, min : string, max : string, option : variant[], callback : (Error, variant[]) -> void) : void;
+    function zrevrangebyscore(key : string, min : string, max : string, option : string[], callback : (Error, variant[]) -> void) : void;
+    function ZREVRANGEBYSCORE(key : string, min : int, max : int, callback : (Error, string[]) -> void) : void;
+    function ZREVRANGEBYSCORE(key : string, min : int, max : int, option : variant[], callback : (Error, variant[]) -> void) : void;
+    function ZREVRANGEBYSCORE(key : string, min : int, max : int, option : string[], callback : (Error, variant[]) -> void) : void;
+    function ZREVRANGEBYSCORE(key : string, min : string, max : int, callback : (Error, string[]) -> void) : void;
+    function ZREVRANGEBYSCORE(key : string, min : string, max : int, option : variant[], callback : (Error, variant[]) -> void) : void;
+    function ZREVRANGEBYSCORE(key : string, min : string, max : int, option : string[], callback : (Error, variant[]) -> void) : void;
+    function ZREVRANGEBYSCORE(key : string, min : int, max : string, callback : (Error, string[]) -> void) : void;
+    function ZREVRANGEBYSCORE(key : string, min : int, max : string, option : variant[], callback : (Error, variant[]) -> void) : void;
+    function ZREVRANGEBYSCORE(key : string, min : int, max : string, option : string[], callback : (Error, variant[]) -> void) : void;
+    function ZREVRANGEBYSCORE(key : string, min : string, max : string, callback : (Error, string[]) -> void) : void;
+    function ZREVRANGEBYSCORE(key : string, min : string, max : string, option : variant[], callback : (Error, variant[]) -> void) : void;
+    function ZREVRANGEBYSCORE(key : string, min : string, max : string, option : string[], callback : (Error, variant[]) -> void) : void;
+
+    function zrevrank(key : string, member : string, callback : (Error, int) -> void) : void;
+    function ZREVRANK(key : string, member : string, callback : (Error, int) -> void) : void;
+
+    function zscore(key : string, member : string, callback : (Error, string) -> void) : void;
+    function ZSCORE(key : string, member : string, callback : (Error, string) -> void) : void;
+
+    function zunionstore(destination : string, numkeys : int, params : string[]) : void;
+    function zunionstore(destination : string, numkeys : int, params : string[], callback : (Error) -> void) : void;
+    function zunionstore(destination : string, numkeys : int, params : string[], callback : (Error, int) -> void) : void;
+    function ZUNIONSTORE(destination : string, numkeys : int, params : string[]) : void;
+    function ZUNIONSTORE(destination : string, numkeys : int, params : string[], callback : (Error) -> void) : void;
+    function ZUNIONSTORE(destination : string, numkeys : int, params : string[], callback : (Error, int) -> void) : void;
 }
