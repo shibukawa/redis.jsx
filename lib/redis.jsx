@@ -148,18 +148,36 @@ native __fake__ class RedisClient
 
     function brpoplpush(source : string, destination : string, timeout : int, callback : (Error, string[]) -> void) : void;
 
-    function clientkill() : void;
+    function clientgetname(callback : (Error, string) -> void) : void;
+
+    function clientkill(ip_port : string) : void;
+    function clientkill(ip_port : string, callback : (Error) -> void) : void;
+    function clientkill(ip_port : string, callback : (Error, int) -> void) : void;
+
     function clientlist(callback : (Error, string[]) -> void) : void;
-    function clientgetname() : void;
-    function clientsetname() : void;
-    function configget() : void;
-    function configset() : void;
+
+    function clientsetname(connectionname : string) : void;
+    function clientsetname(connectionname : string, callback : (Error) -> void) : void;
+    function clientsetname(connectionname : string, callback : (Error, int) -> void) : void;
+
+    function configget(parameter : string, callback : (Error, string[]) -> void) : void;
+
     function configresetstat() : void;
+    function configresetstat(callback : (Error) -> void) : void;
+    function configresetstat(callback : (Error, string) -> void) : void;
+
+    function configrewrite() : void;
+    function configrewrite(callback : (Error) -> void) : void;
+    function configrewrite(callback : (Error, string) -> void) : void;
+
+    function configset(parameter : string, value : int) : void;
+    function configset(parameter : string, value : int, callback : (Error) -> void) : void;
+    function configset(parameter : string, value : int, callback : (Error, int) -> void) : void;
+    function configset(parameter : string, value : string) : void;
+    function configset(parameter : string, value : string, callback : (Error) -> void) : void;
+    function configset(parameter : string, value : string, callback : (Error, int) -> void) : void;
 
     function dbsize(callback : (Error, int) -> void) : void;
-
-    function debugobject() : void;
-    function debugsegfault() : void;
 
     function decr(key : string) : void;
     function decr(key : string, callback : (Error) -> void) : void;
@@ -178,7 +196,9 @@ native __fake__ class RedisClient
 
     function dump(key : string, callback : (Error, string) -> void) : void;
 
-    function echo() : void;
+    function echo(message : string) : void;
+    function echo(message : string, callback : (Error) -> void) : void;
+    function echo(message : string, callback : (Error, string) -> void) : void;
 
     function eval(script : string, numkeys : int) : void;
     function eval(script : string, numkeys : int, callback : (Error) -> void) : void;
@@ -237,7 +257,12 @@ native __fake__ class RedisClient
     function expireat(key : string, timestamp : int, value : string, callback : (Error, int) -> void) : void;
 
     function flushall() : void;
+    function flushall(callback : (Error) -> void) : void;
+    function flushall(callback : (Error, string) -> void) : void;
+
     function flushdb() : void;
+    function flushdb(callback : (Error) -> void) : void;
+    function flushdb(callback : (Error, string) -> void) : void;
 
     function get(key : string, callback : (Error, string) -> void) : void;
 
@@ -305,11 +330,12 @@ native __fake__ class RedisClient
     function incrbyfloat(key : string, increment : number, callback : (Error) -> void) : void;
     function incrbyfloat(key : string, increment : number, callback : (Error, string) -> void) : void;
 
-    function info() : void;
+    function info(callback : (Error, string[]) -> void) : void;
+    function info(section : string, callback : (Error, string[]) -> void) : void;
 
     function keys(pattern : string, callback : (Error, string[]) -> void) : void;
 
-    function lastsave() : void;
+    function lastsave(callback : (Error, int) -> int) : void;
 
     function lindex(key : string, value : string, callback : (Error, int) -> void) : void;
 
@@ -354,6 +380,8 @@ native __fake__ class RedisClient
     function migrate(host : string, port : int, destinationdb : string, timeout : int, command : string, callback : (Error, string) -> void) : void;
 
     function monitor() : void;
+    function monitor(callback : (Error) -> void) : void;
+    function monitor(callback : (Error, string) -> void) : void;
 
     function move(key : string, db : string) : void;
     function move(key : string, db : string, callback : (Error) -> void) : void;
@@ -386,7 +414,7 @@ native __fake__ class RedisClient
     function pexpireat(key : string, millisecondsTimestamp : int, value : string, callback : (Error) -> void) : void;
     function pexpireat(key : string, millisecondsTimestamp : int, value : string, callback : (Error, int) -> void) : void;
 
-    function ping() : void;
+    function ping(callback : (Error, string) -> void) : void;
 
     function psetex(key : string, milliseconds : int, value : string) : void;
     function psetex(key : string, milliseconds : int, value : string, callback : (Error) -> void) : void;
@@ -455,6 +483,8 @@ native __fake__ class RedisClient
     function sadd(key : string, members : string[], callback : (Error, int) -> void) : void;
 
     function save() : void;
+    function save(callback : (Error) -> void) : void;
+    function save(callback : (Error, string) -> void) : void;
 
     function scard(key : string, callback : (Error, int) -> void) : void;
 
@@ -504,6 +534,11 @@ native __fake__ class RedisClient
     function setrange(key : string, offset : int, value : string, callback : (Error, int) -> void) : void;
 
     function shutdown() : void;
+    function shutdown(callback : (Error) -> void) : void;
+    function shutdown(callback : (Error, string) -> void) : void;
+    function shutdown(param : string) : void;
+    function shutdown(param : string, callback : (Error) -> void) : void;
+    function shutdown(param : string, callback : (Error, string) -> void) : void;
 
     function sinter(key : string, set : string, callback : (Error, string[]) -> void) : void;
     function sinter(key : string, sets : string[], callback : (Error, string[]) -> void) : void;
@@ -517,8 +552,11 @@ native __fake__ class RedisClient
 
     function sismember(key : string, member : string, callback : (Error, int) -> void) : void;
 
-    function slaveof() : void;
-    function slowlog() : void;
+    function slaveof(host : string, port : int) : void;
+    function slaveof(host : string, port : int, callback : (Error) -> void) : void;
+    function slaveof(host : string, port : int, callback : (Error, string) -> void) : void;
+
+    //function slowlog() : void;
 
     function smembers(key : string, callback : (Error, string[]) -> void) : void;
 
@@ -562,8 +600,7 @@ native __fake__ class RedisClient
     function sunionstore(destination : string, key : string, sets : string[], callback : (Error) -> void) : void;
     function sunionstore(destination : string, key : string, sets : string[], callback : (Error, int) -> void) : void;
 
-    function sync() : void;
-    function time() : void;
+    function time(callback : (Error, string[]) -> void) : void;
 
     function ttl(key : string, callback : (Error, int) -> void) : void;
 
@@ -715,6 +752,10 @@ native __fake__ class RedisTransaction
     function dump(key : string) : RedisTransaction;
     function dump(key : string, callback : (Error) -> void) : RedisTransaction;
     function dump(key : string, callback : (Error, string) -> void) : RedisTransaction;
+
+    function echo(message : string) : RedisTransaction;
+    function echo(message : string, callback : (Error) -> void) : RedisTransaction;
+    function echo(message : string, callback : (Error, string) -> void) : RedisTransaction;
 
     function eval(script : string, numkeys : int) : RedisTransaction;
     function eval(script : string, numkeys : int, callback : (Error) -> void) : RedisTransaction;
@@ -947,6 +988,10 @@ native __fake__ class RedisTransaction
     function pexpireat(key : string, millisecondsTimestamp : int, value : string, callback : (Error) -> void) : RedisTransaction;
     function pexpireat(key : string, millisecondsTimestamp : int, value : string, callback : (Error, int) -> void) : RedisTransaction;
 
+    function ping() : RedisTransaction;
+    function ping(callback : (Error) -> void) : RedisTransaction;
+    function ping(callback : (Error, string) -> void) : RedisTransaction;
+
     function psetex(key : string, milliseconds : int, value : string) : RedisTransaction;
     function psetex(key : string, milliseconds : int, value : string, callback : (Error) -> void) : RedisTransaction;
     function psetex(key : string, milliseconds : int, value : string, callback : (Error, string) -> void) : RedisTransaction;
@@ -974,6 +1019,10 @@ native __fake__ class RedisTransaction
     function pubsubnumpat() : RedisTransaction;
     function pubsubnumpat(callback : (Error) -> void) : RedisTransaction;
     function pubsubnumpat(callback : (Error, int) -> void) : RedisTransaction;
+
+    function quit() : RedisTransaction;
+    function quit(callback : (Error) -> void) : RedisTransaction;
+    function quit(callback : (Error, string) -> void) : RedisTransaction;
 
     function randomkey() : RedisTransaction;
     function randomkey(callback : (Error) -> void) : RedisTransaction;
@@ -1057,7 +1106,9 @@ native __fake__ class RedisTransaction
     function sdiffstore(destination : string, key : string, sets : string[], callback : (Error) -> void) : RedisTransaction;
     function sdiffstore(destination : string, key : string, sets : string[], callback : (Error, int) -> void) : RedisTransaction;
 
-    function select() : RedisTransaction;
+    function select(index : int) : RedisTransaction;
+    function select(index : int, callback : (Error) -> void) : RedisTransaction;
+    function select(index : int, callback : (Error, string) -> void) : RedisTransaction;
 
     function set(key : string, value : string) : RedisTransaction;
     function set(key : string, value : string, callback : (Error) -> void) : RedisTransaction;
