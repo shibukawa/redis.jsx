@@ -6,10 +6,15 @@ class _Main {
     {
         var client = redis.createClient();
 
-        client.eval("return 100.5", 0, (err : Error, res : int) -> {
-            console.dir(err);
-            console.dir(res);
-            client.quit();
+        client.keys("*", (err, keys) -> {
+            keys.forEach((key, pos) -> {
+                client.type(key, (err, keytype) -> {
+                    console.log(key + " is " + keytype);
+                    if (pos == (keys.length - 1)) {
+                        client.quit();
+                    }
+                });
+            });
         });
     }
 }

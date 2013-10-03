@@ -1,4 +1,5 @@
 import "console.jsx";
+import "js/nodejs.jsx";
 import "redis.jsx";
 
 class _Main {
@@ -6,10 +7,12 @@ class _Main {
     {
         var client = redis.createClient();
 
-        client.eval("return 100.5", 0, (err : Error, res : int) -> {
-            console.dir(err);
-            console.dir(res);
-            client.quit();
+        client.monitor((err, res) -> {
+            console.log("Entering monitoring mode.");
+        });
+
+        client.on("monitor", (time : int, args : string[]) -> {
+            console.log(time + ": " + node.util.inspect(args));
         });
     }
 }

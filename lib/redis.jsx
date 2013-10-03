@@ -46,7 +46,10 @@ twoWordsCommands.forEach(function (command) {
 });
 
 var overrideCommands = [
-    'del', 'subscribe', 'psubscribe', 'unsubscribe', 'punsubscribe'
+    'blpop', 'brpop', 'del', 'eval', 'evalsha', 'hdel', 'hmset', 'lpush', 'msetnx', 'punsubscribe',
+    'psubscribe', 'rpush', 'sadd', 'sdiff', 'sdiffstore', 'sinter', 'sinterstore', 'sort', 'srem',
+    'subscribe', 'sunion', 'sunionstore', 'unsubscribe', 'zadd', 'zinterstore', 'zrangebyscore',
+    'zrem', 'zrevrangebyscore', 'zunionstore'
 ];
 
 function flatten(args) {
@@ -69,7 +72,6 @@ function flatten(args) {
 overrideCommands.forEach(function (command) {
     RedisClient.prototype[command] = function () {
         var args = flatten(Array.prototype.slice.call(arguments));
-        args.unshift(command);
         return this.send_command(command, args);
     };
 });
@@ -286,7 +288,7 @@ native __fake__ class RedisClient
 
     function hget(key : string, field : string, callback : (Error, Nullable.<string>) -> void) : boolean;
 
-    function hgetall(key : string, callback : (Error, string[]) -> void) : boolean;
+    function hgetall(key : string, callback : (Error, Map.<string>) -> void) : boolean;
 
     function hincrby(key : string, field : string, increment : int) : boolean;
     function hincrby(key : string, field : string, increment : int, callback : (Error) -> void) : boolean;
@@ -482,6 +484,12 @@ native __fake__ class RedisClient
     function rpushx(key : string, value : string, callback : (Error) -> void) : boolean;
     function rpushx(key : string, value : string, callback : (Error, int) -> void) : boolean;
 
+    function sadd(key : string, member : number) : boolean;
+    function sadd(key : string, member : number, callback : (Error) -> void) : boolean;
+    function sadd(key : string, member : number, callback : (Error, int) -> void) : boolean;
+    function sadd(key : string, members : number[]) : boolean;
+    function sadd(key : string, members : number[], callback : (Error) -> void) : boolean;
+    function sadd(key : string, members : number[], callback : (Error, int) -> void) : boolean;
     function sadd(key : string, member : string) : boolean;
     function sadd(key : string, member : string, callback : (Error) -> void) : boolean;
     function sadd(key : string, member : string, callback : (Error, int) -> void) : boolean;
@@ -558,7 +566,7 @@ native __fake__ class RedisClient
     function sinter(key : string, set : string, callback : (Error, string[]) -> void) : boolean;
     function sinter(key : string, sets : string[], callback : (Error, string[]) -> void) : boolean;
 
-    function sintertore(destination : string, key : string, set : string) : boolean;
+    function sinterstore(destination : string, key : string, set : string) : boolean;
     function sinterstore(destination : string, key : string, set : string, callback : (Error) -> void) : boolean;
     function sinterstore(destination : string, key : string, set : string, callback : (Error, int) -> void) : boolean;
     function sinterstore(destination : string, key : string, sets : string[]) : boolean;
@@ -861,7 +869,7 @@ native __fake__ class RedisTransaction
 
     function hgetall(key : string) : RedisTransaction;
     function hgetall(key : string, callback : (Error) -> void) : RedisTransaction;
-    function hgetall(key : string, callback : (Error, string[]) -> void) : RedisTransaction;
+    function hgetall(key : string, callback : (Error, Map.<string>) -> void) : RedisTransaction;
 
     function hincrby(key : string, field : string, increment : int) : RedisTransaction;
     function hincrby(key : string, field : string, increment : int, callback : (Error) -> void) : RedisTransaction;
@@ -1083,6 +1091,12 @@ native __fake__ class RedisTransaction
     function rpushx(key : string, value : string, callback : (Error) -> void) : RedisTransaction;
     function rpushx(key : string, value : string, callback : (Error, int) -> void) : RedisTransaction;
 
+    function sadd(key : string, member : number) : RedisTransaction;
+    function sadd(key : string, member : number, callback : (Error) -> void) : RedisTransaction;
+    function sadd(key : string, member : number, callback : (Error, int) -> void) : RedisTransaction;
+    function sadd(key : string, members : number[]) : RedisTransaction;
+    function sadd(key : string, members : number[], callback : (Error) -> void) : RedisTransaction;
+    function sadd(key : string, members : number[], callback : (Error, int) -> void) : RedisTransaction;
     function sadd(key : string, member : string) : RedisTransaction;
     function sadd(key : string, member : string, callback : (Error) -> void) : RedisTransaction;
     function sadd(key : string, member : string, callback : (Error, int) -> void) : RedisTransaction;
