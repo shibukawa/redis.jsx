@@ -633,6 +633,17 @@ native __fake__ class RedisClient
     function unsubscribe(channel : string) : boolean;
     function unsubscribe(channels : string[]) : boolean;
 
+    function unwatch() : boolean;
+    function unwatch(callback : (Error) -> void) : boolean;
+    function unwatch(callback : (Error, string) -> void) : boolean;
+
+    function watch(key : string) : boolean;
+    function watch(key : string, callback : (Error) -> void) : boolean;
+    function watch(key : string, callback : (Error, string) -> void) : boolean;
+    function watch(keys : string[]) : boolean;
+    function watch(keys : string[], callback : (Error) -> void) : boolean;
+    function watch(keys : string[], callback : (Error, string) -> void) : boolean;
+
     function zadd(key : string, score : int, member : string) : boolean;
     function zadd(key : string, score : int, member : string, callback : (Error) -> void) : boolean;
     function zadd(key : string, score : int, member : string, callback : (Error, int) -> void) : boolean;
